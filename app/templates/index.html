@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <h1>シンプル大喜利WEB!</h1>
+    </head>
+    <a href="/logout">ログアウトする</a>
+    <body>
+        <img src="/static/images/ponyo040.jpg" alt="シンプル大喜利WEBトップイメージ" width="50%" height="50%">
+        <form action="/add" method="post" enctype = "multipart/form-data">
+            <input type="text" name="title" placeholder="title">
+            <input type="file" name="image_path" accept=".png,.jpg">  
+            <input type="submit" value="Add">
+        </form>
+
+        <form action="/delete" method="post" id="delete">
+            <input type="submit" value="Delete Selected All Oogiri">
+        </form>
+        {% for oogiri in all_oogiri %}
+        <div>
+            <input type="checkbox" name="delete" form="delete" value={{oogiri.id}}>
+            <img src="/static/uploads/{{oogiri.image_path}}" alt="image" width=512 >
+            {{oogiri.title}}
+            <br>
+            （{{oogiri.date}}）
+            <br>
+
+        </div>
+        
+        {% endfor %}
+    </body>
+</html>
