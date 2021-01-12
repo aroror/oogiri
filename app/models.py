@@ -2,34 +2,26 @@ from flask_sqlalchemy import SQLAlchemy
 from app.app import app
 from datetime import datetime
 
-class OogiriContent(Base):
-    __tablename__ = 'oogiricontents'
-    id = Column(Integer, primary_key=True)
-    title = Column(String(128), unique=True)
-    image_path = Column(String(128))
-    date = Column(DateTime, default=datetime.now())
-    tags = Column(postgresql.ARRAY(Integer))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/oogiri'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-    def __init__(self, title=None,image_path=None,tags = None, date=None):
-        self.title = title
-        self.image_path = image_path
-        self.date = date
-        self.tags = tags
-
-    def __repr__(self):
-        return '<Title %r>' % (self.title)
-
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    user_name = Column(String(128), unique=True)
-    hashed_password = Column(String(128))
-
-    def __init__(self, user_name=None, hashed_password=None):
-        self.user_name = user_name
-        self.hashed_password = hashed_password
+class Content(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    pub_date = db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
+    good_count = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
+    user = db.relationship('User',backref=db.backref('content', lazy=True))
 
     def __repr__(self):
-        return '<Name %r>' % (self.user_name)    
+        return '<Content %r>' % self.title
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    hashed_password = db.Column(db.String(100), nullable=False)
 
+    def __repr__(self):
+        return '<User %r>' % self.name

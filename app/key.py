@@ -1,2 +1,2 @@
-SECRET_KEY = "jhfhgsghhh3333f8"
-SALT = "dfagogh8gdskdagh"
+SECRET_KEY = "NVcuWXHAre26DUNOTnsA"
+SALT = "V5IyJ4yhTtmfu5DIXtsh"
